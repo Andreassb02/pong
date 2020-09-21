@@ -13,6 +13,11 @@ SPEED = 10
 FLOW_WIDTH = 10
 FLOW_COLOR = (0,255,0)
 
+FLOW_LR = 0 # Left to right
+FLOW_RL = 1 # Right to left
+FLOW_TB = 2 # Top to bottom
+FLOW_BT = 4 # Botoom to top
+
 # Denne kataogen har vi statistke filer i - ikke kode
 ASSETS_DIR = 'assets'
 
