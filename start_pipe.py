@@ -12,11 +12,6 @@ from base_pipe import BasePipe
 class StartPipe(BasePipe):
     def __init__(self, position):
         BasePipe.__init__(self, position)
-        # Initialiserer en retning
-        #self.flow_dir = settings.FLOW_TB
-        #self.flow_dir = settings.FLOW_BT
-        #self.flow_dir = settings.FLOW_LR
-        #self.flow_dir = settings.FLOW_RL
         # Flyttet initaliseringen av flow til en egen init funksjon - mer ryddig og lettere å test
         self.init_flow()
 
