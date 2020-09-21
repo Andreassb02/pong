@@ -15,7 +15,7 @@ class BasePipe(pygame.sprite.Sprite):
     # tegne dem. Vi kan derfor ha et parmeter som vil brukes av alle de arvede klassene.
     # __init__ er en "magisk" funksjon. Det er den som brukes når en opretter objekt.
     # Eks. objekt = StaticElement(settings.ITEM_CRATE_BROWN, (200, 100)) 
-    def __init__(self, position):
+    def __init__(self, position, flow_dir = settings.FLOW_LR):
         # Vi kaller __init__ til den klassen vi har arvet fra
         # Vi bør egentlig bruke "super()" funksjonen for dette, men det kan være lettere
         # å lese når en skriver navnet på klassen en arver fra
@@ -33,10 +33,11 @@ class BasePipe(pygame.sprite.Sprite):
         # Det er det vi mener med "innkapsling"
         #self.image = utils.load_image(filename, graphic['size'])
         
-
+        self.hit = False
         self.image = pygame.Surface((settings.TUBE_SIZE, settings.TUBE_SIZE))
-        self.image.fill((138, 143, 150))
+        self.image.fill(settings.BLOCK_BACKGROUND_COLR)
 
+        self.flow_dir = flow_dir
         # Fetch the rectangle object that has the dimensions of the image
         # Update the position of this object by setting the values of rect.x and rect.y
         self.rect = self.image.get_rect()
