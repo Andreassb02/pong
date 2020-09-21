@@ -44,10 +44,10 @@ placed = pygame.sprite.Group()
 
 #test_base_tube = BaseTube((9,6))
 
-placed.add(StartPipe((2,3)))
-placed.add(StraightPipe((4,3)))
-placed.add(BentPipe((6,3)))
-placed.add(CrossPipe((8,3)))
+#placed.add(StartPipe((2,3)))
+#placed.add(StraightPipe((4,3)))
+#placed.add(BentPipe((6,3)))
+#placed.add(CrossPipe((8,3)))
 
 
 
@@ -67,6 +67,14 @@ while True:
         if (event.type == QUIT) or ((event.type == KEYDOWN) and (event.key == K_q)):
             pygame.quit()
             sys.exit()
+        elif event.type == MOUSEBUTTONUP:
+            mouse_coords = pygame.mouse.get_pos()
+            x_grid = int((mouse_coords[0]-200)/80)
+            y_grid = int((mouse_coords[1]-80)/80)
+            if mouse_coords[0] < 200 or mouse_coords[1] < 80:
+                pass
+            else:
+                placed.add(CrossPipe((x_grid,y_grid))) #nextpipe
 
     # Fyller surface med farge (RGB)
     surface.fill((255, 255, 255))
