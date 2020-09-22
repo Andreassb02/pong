@@ -1,9 +1,11 @@
 import os
 import sys
 import pygame
+import ast
 from pygame.locals import *
 import settings
 import utils
+import random
 from start_pipe import StartPipe
 from straight_pipe import StraightPipe
 from bent_pipe import BentPipe
@@ -44,29 +46,47 @@ placed = pygame.sprite.Group()
 
 #test_base_tube = BaseTube((9,6))
 
-placed.add(StartPipe((2,3)))
-placed.add(StraightPipe((4,3)))
-placed.add(BentPipe((6,3)))
-placed.add(CrossPipe((8,3)))
-
-
-
 
 #for x in range(settings.GRID[0]):
 #    for y in range(settings.GRID[1]):
 #        placed.add(StartPipe((x,y)))
 
+pipes = (StraightPipe, BentPipe, CrossPipe)
+coming_pipes = [random.choice(pipes) for r in range(4)]
+grid_taken = []
 
+placed.add(coming_pipes[3]((-2,0)))
+placed.add(coming_pipes[2]((-2,1)))
+placed.add(coming_pipes[1]((-2,2)))
+placed.add(coming_pipes[0]((-2,3)))
 
 while True:
     # Event pump sjekker om det har skjedd noe eks. tastetyrkk og musklikk
     # Andreas jobber med dette. Kan teste StartPipe?
+    next_pipe = coming_pipes[0]
     pygame.event.pump()
     for event in pygame.event.get():
         # Avslutter ved Window X eller Q tast
         if (event.type == QUIT) or ((event.type == KEYDOWN) and (event.key == K_q)):
             pygame.quit()
             sys.exit()
+        elif event.type == MOUSEBUTTONUP:
+            mouse_coords = pygame.mouse.get_pos()
+            x_grid = int((mouse_coords[0]-200)/80)
+            y_grid = int((mouse_coords[1]-80)/80)
+            if mouse_coords[0] < 200 or mouse_coords[1] < 80 or x_grid > 9 or y_grid > 6 or f"{x_grid},{y_grid}" in grid_taken:
+                pass
+            else:
+                placed.add(next_pipe((x_grid,y_grid)))
+                grid_taken.append(f"{x_grid},{y_grid}")
+                print(grid_taken)
+                coming_pipes.pop(0)
+                coming_pipes.append(random.choice(pipes))
+                placed.add(coming_pipes[3]((-2,0)))
+                placed.add(coming_pipes[2]((-2,1)))
+                placed.add(coming_pipes[1]((-2,2)))
+                placed.add(coming_pipes[0]((-2,3)))
+            
 
     # Fyller surface med farge (RGB)
     surface.fill((255, 255, 255))
