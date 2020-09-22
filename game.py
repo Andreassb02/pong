@@ -44,10 +44,11 @@ placed = pygame.sprite.Group()
 
 #test_base_tube = BaseTube((9,6))
 
-#placed.add(StartPipe((2,3)))
-#placed.add(StraightPipe((4,3)))
-#placed.add(BentPipe((6,3)))
-#placed.add(CrossPipe((8,3)))
+#Placeholders for neste pipes
+placed.add(StartPipe((-2,0)))
+placed.add(StraightPipe((-2,1)))
+placed.add(BentPipe((-2,2)))
+placed.add(CrossPipe((-2,3)))
 
 
 
@@ -71,7 +72,7 @@ while True:
             mouse_coords = pygame.mouse.get_pos()
             x_grid = int((mouse_coords[0]-200)/80)
             y_grid = int((mouse_coords[1]-80)/80)
-            if mouse_coords[0] < 200 or mouse_coords[1] < 80:
+            if mouse_coords[0] < 200 or mouse_coords[1] < 80 or x_grid > 9 or y_grid > 6:
                 pass
             else:
                 placed.add(CrossPipe((x_grid,y_grid))) #nextpipe
