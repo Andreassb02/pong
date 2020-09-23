@@ -4,6 +4,7 @@ import pygame
 from pygame.locals import *
 import settings
 import utils
+import random
 from start_pipe import StartPipe
 from straight_pipe import StraightPipe
 from bent_pipe import BentPipe
@@ -44,24 +45,31 @@ placed = pygame.sprite.Group()
 
 #test_base_tube = BaseTube((9,6))
 
-#Placeholders for neste pipes
-placed.add(StartPipe((-2,0)))
-placed.add(StraightPipe((-2,1)))
-placed.add(BentPipe((-2,2)))
-placed.add(CrossPipe((-2,3)))
-
-
-
 
 #for x in range(settings.GRID[0]):
 #    for y in range(settings.GRID[1]):
 #        placed.add(StartPipe((x,y)))
 
+pipes = (StraightPipe, BentPipe, CrossPipe)
+coming_pipes = [random.choice(pipes) for r in range(4)]
+grid_taken = []
+start_x = random.randint(0, 9)
+start_y = random.randint(0, 6)
+placed.add(StartPipe((start_x,start_y)))
+grid_taken.append(f'{start_x},{start_y}')
+q_4 = coming_pipes[3]((-2,0))
+q_3 = coming_pipes[2]((-2,1))
+q_2 = coming_pipes[1]((-2,2))
+q_1 = coming_pipes[0]((-2,3))
+placed.add(q_4)
+placed.add(q_3)
+placed.add(q_2)
+placed.add(q_1)
 
-
-while True:
+while True: 
     # Event pump sjekker om det har skjedd noe eks. tastetyrkk og musklikk
     # Andreas jobber med dette. Kan teste StartPipe?
+    next_pipe = coming_pipes[0]
     pygame.event.pump()
     for event in pygame.event.get():
         # Avslutter ved Window X eller Q tast
@@ -72,10 +80,22 @@ while True:
             mouse_coords = pygame.mouse.get_pos()
             x_grid = int((mouse_coords[0]-200)/80)
             y_grid = int((mouse_coords[1]-80)/80)
-            if mouse_coords[0] < 200 or mouse_coords[1] < 80 or x_grid > 9 or y_grid > 6:
+            if mouse_coords[0] < 200 or mouse_coords[1] < 80 or x_grid > 9 or y_grid > 6 or f"{x_grid},{y_grid}" in grid_taken:
                 pass
             else:
-                placed.add(CrossPipe((x_grid,y_grid))) #nextpipe
+                placed.add(next_pipe((x_grid,y_grid)))
+                grid_taken.append(f"{x_grid},{y_grid}")
+                coming_pipes.pop(0)
+                coming_pipes.append(random.choice(pipes))
+                placed.remove(q_1)
+                placed.remove(q_2)
+                placed.remove(q_3)
+                placed.remove(q_4)
+                placed.add(coming_pipes[3]((-2,0)))
+                placed.add(coming_pipes[2]((-2,1)))
+                placed.add(coming_pipes[1]((-2,2)))
+                placed.add(coming_pipes[0]((-2,3)))
+            
 
     # Fyller surface med farge (RGB)
     surface.fill((255, 255, 255))
